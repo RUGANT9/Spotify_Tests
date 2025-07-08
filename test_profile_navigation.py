@@ -29,7 +29,7 @@ def test_open_user_profile(spotify_app):
     # Verify by sending TAB a few times then ESC to close
     send_keys("{TAB}{TAB}{ESC}")
 
-def test_navigate_to_account_settings(spotify_app):
+def test_navigate_to_profile_settings(spotify_app):
     """Open profile and navigate to Account Settings using keyboard."""
     send_keys("%f{UP}{ENTER}")           # Open user menu
     time.sleep(2)

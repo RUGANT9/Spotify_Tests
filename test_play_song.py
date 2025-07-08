@@ -32,7 +32,7 @@ def test_play_first_track(spotify_app):
     # verify playback toggled—we use the space key again to pause
     send_keys(" ")
 
-def test_play_song_from_search_results(spotify_app):
+def test_play_song_from_results(spotify_app):
     """Search for a song and play the first result."""
     send_keys("^l")               # Ctrl+L to focus search bar
     time.sleep(1)

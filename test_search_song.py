@@ -34,7 +34,7 @@ def test_search_song_and_open_result(spotify_app):
     time.sleep(2)
 
 
-def test_search_album_and_play_first_track(spotify_app):
+def test_search_album(spotify_app):
     """
     Search for an album ('Divide') and attempt to play its first track.
     """
