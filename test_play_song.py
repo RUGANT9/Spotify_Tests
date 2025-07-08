@@ -31,3 +31,21 @@ def test_play_first_track(spotify_app):
     time.sleep(2)
     # verify playback toggled—we use the space key again to pause
     send_keys(" ")
+
+def test_play_song_from_search_results(spotify_app):
+    """Search for a song and play the first result."""
+    send_keys("^l")               # Ctrl+L to focus search bar
+    time.sleep(1)
+    send_keys("Imagine Dragons{ENTER}")  # search for a song/artist
+    time.sleep(3)
+    send_keys("{TAB 5}{ENTER}")   # navigate to first result and play
+    time.sleep(2)
+    send_keys(" ")                # pause after verifying
+
+def test_play_from_recently_played(spotify_app):
+    """Play a song from Recently Played section using keyboard only."""
+    send_keys("{TAB 10}")         # tab multiple times to reach Recently Played
+    time.sleep(2)
+    send_keys("{RIGHT 2}{ENTER}") # move to a recently played item and play
+    time.sleep(2)
+    send_keys(" ")                # pause to verify play triggered

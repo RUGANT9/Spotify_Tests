@@ -32,3 +32,27 @@ def test_search_song_and_open_result(spotify_app):
     # move to first result and open
     send_keys("{TAB}{TAB}{ENTER}")
     time.sleep(2)
+
+
+def test_search_album_and_play_first_track(spotify_app):
+    """
+    Search for an album ('Divide') and attempt to play its first track.
+    """
+    send_keys("^l")
+    send_keys("Divide Album{ENTER}")
+    time.sleep(4)
+    send_keys("{TAB 5}{ENTER}")  # Tab to album section, open
+    time.sleep(3)
+    send_keys("{TAB 3}{ENTER}")  # Navigate to and play first track
+    time.sleep(2)
+
+def test_search_artist_and_view_profile(spotify_app):
+    """
+    Search for an artist ('Adele') and open the artist profile page.
+    """
+    send_keys("^l")
+    send_keys("Adele{ENTER}")
+    time.sleep(3)
+    send_keys("{TAB 4}{ENTER}")  # Navigate to artist section, open
+    time.sleep(3)
+    send_keys("{TAB 2}")         # Tab around inside profile

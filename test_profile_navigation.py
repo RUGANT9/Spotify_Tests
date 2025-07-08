@@ -28,3 +28,20 @@ def test_open_user_profile(spotify_app):
     time.sleep(3)
     # Verify by sending TAB a few times then ESC to close
     send_keys("{TAB}{TAB}{ESC}")
+
+def test_navigate_to_account_settings(spotify_app):
+    """Open profile and navigate to Account Settings using keyboard."""
+    send_keys("%f{UP}{ENTER}")           # Open user menu
+    time.sleep(2)
+    send_keys("{TAB 2}{ENTER}")          # Navigate to Account settings or similar
+    time.sleep(3)
+    send_keys("{ESC}")                   # Close settings screen
+
+def test_log_out_flow_from_profile(spotify_app):
+    """Navigate through the profile menu and trigger logout flow (without confirming)."""
+    send_keys("%f{UP}{ENTER}")           # Open profile dropdown
+    time.sleep(2)
+    send_keys("{TAB 5}")                 # Tab to Logout or equivalent
+    send_keys("{ENTER}")                 # Trigger logout (you can cancel in real test)
+    time.sleep(1)
+    send_keys("{ESC}")                   # Cancel logout or close dialog
