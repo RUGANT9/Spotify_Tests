@@ -46,7 +46,7 @@ def test_search_album_and_play_first_track(spotify_app):
     send_keys("{TAB 3}{ENTER}")  # Navigate to and play first track
     time.sleep(2)
 
-def test_search_artist_and_view_profile(spotify_app):
+def test_search_artist_and_view_artist(spotify_app):
     """
     Search for an artist ('Adele') and open the artist profile page.
     """
