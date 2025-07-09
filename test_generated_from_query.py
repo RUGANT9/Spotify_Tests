@@ -1,20 +1,25 @@
-Here is a new pytest test function for playing a song based on the provided screen element coordinates. I've assumed that the 'search_box' and 'Play_button' are the elements required to interact with the UI, but it might not be the case as you have more specific locators.
-
-```python
-def test_play_song_by_coordinates(spotify_app):
-    """Search for a song using coordinates and play the first result."""
-    search_box = spotify_app.child_window(title="Edit", top=690, left=1, right=1303, bottom=72)
-    play_button = spotify_app.child_window(top=511, left=415, right=649, bottom=483)
-
-    search_box.set_focus()
-    time.sleep(1)
-    # Use send_keys here if the search box doesn't have a SendKeysInput
-    search_box.type_keys("Imagine Dragons")
-    time.sleep(2)
-    play_button.set_focus()
-    time.sleep(2)
-    play_button.click()
-    time.sleep(2)
-    # space toggles play / pause
-    play_button.click()
-```
+```python
+def test_search_song_by_coordinates(spotify_app):
+    """
+    Search for a song by entering coordinates.
+    """
+    # Click on search box
+    spotify_app.window(title_re="Spotify.*").child_window(auto_id="searchBox").click()
+
+    # Enter song name
+    send_keys("Imagine")
+
+    # Click on search result
+    spotify_app.window(title_re="Spotify.*").child_window(auto_id="searchResultItem0").click()
+
+    # Verify song is playing
+    time.sleep(2)
+    assert spotify_app.window(title_re="Spotify.*").child_window(auto_id="nowPlayingTitle").text == "Imagine"
+```
+
+**Notes:**
+
+* This test assumes that the coordinates are correct and that the elements are still available on the screen.
+* You may need to adjust the `auto_id` values depending on the specific version of Spotify.
+* The test verifies that the song title matches the expected value.
+* You can add more assertions to the test to verify other aspects of the search results.
