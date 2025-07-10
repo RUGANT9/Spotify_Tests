@@ -1,41 +1,40 @@
-Here is a complete pytest test function for logging out from the profile using the provided coordinates and following the structure of the existing tests:
+Here's a new pytest test function for playing back a track based on the provided playback controls. I've added a new function `get_play_button` to handle getting the play button element either by its coordinates or by its ID, depending on whether screen element coordinates are provided.
 
 ```python
-from pywinauto.application import Application
-from pywinauto.keyboard import send_keys, keydown, keyup
-from pywinauto.utils.WindowUtils import CenterPointOf
-import pytest, time
+import pywinauto.application as app
+from pywinauto.keyboard import send_keys, KEYDOWN, KEYUP
+import time
 
 SPOTIFY_PATH = r"C:\Users\<YOUR_USER>\AppData\Local\Microsoft\WindowsApps\Spotify.exe"
-LOGOUT_BUTTON = (511, 415, 649, 483)  # Provided logout button coordinates
+PLAY_BUTTON_ID = "play-button"  # The ID of the play button element
 
 def connect_spotify():
     try:
-        return Application(backend="uia").connect(title_re="Spotify.*", timeout=10)
+        app = app.Application(backend="uia").connect(title_re="Spotify.*", timeout=10)
+        return app
     except Exception:
-        return Application(backend="uia").start(SPOTIFY_PATH)
+        return app.Application(backend="uia").start(SPOTIFY_PATH)
 
-@pytest.fixture(scope="function")
-def spotify_app():
-    app = connect_spotify()
-    time.sleep(4)
-    win = app.window(title_re="Spotify.*")
-    win.set_focus()
-    yield win
+def get_play_button():
+    if coordinates_provided:  # If screen element coordinates are provided, use them to find the play button
+        # Replace (left, top, width, height) with the actual coordinates
+        return app.Window(top_right=(1200, 400), bottom_right=(1400, 600)).child_window(title=PLAY_BUTTON_ID)
+    else:  # Otherwise, use the ID to find the play button element
+        return app.get_window(class_name="SpotifyWindowClass").child_window(control_id=PLAY_BUTTON_ID)
 
-def test_log_out_from_profile(spotify_app):
-    """Navigate through the profile menu and trigger logout flow (without confirming)."""
-    # Move to the search box and click
-    search_box = spotify_app.window_by_position(*CenterPointOf(spotify_app.window(title="Spotify.*")), window_subtree=True)
-    search_box.click()
+def test_playback():
+    """Test playing a track in Spotify using keyboard interactions."""
+    spotify_app = connect_spotify()
+
+    play_button = get_play_button()  # Get the play button element either by its coordinates or ID
+
+    send_keys("{TAB}")                     # Navigate to the play area
     time.sleep(1)
-
-    # Move to the logout button and click
-    logout_button = search_box.child_window(title='Log out', top_right=LOGOUT_BUTTON)
-    logout_button.click()
-    time.sleep(1)
+    KEYDOWN('vk_RETURN')                   # Press Enter to select the track
+    time.sleep(2)
+    send_keys(KEYDOWN('vk_SPACE'))         # Toggle play/pause
+    time.sleep(2)
+    send_keys(KEYUP('vk_SPACE'))           # Toggle play/pause again to verify that it's playing
 ```
 
-This test function moves the focus to the search box, simulates a click on it to open the profile dropdown, and then clicks on the logout button using the provided coordinates. The time delays are placed according to the existing tests for consistency.
-
-You can further customize this test by handling exceptions if the elements are not found or by adding more assertions to verify that the user has been logged out successfully after performing the logout flow.
+Replace `SpotifyWindowClass` with the appropriate class name for your Spotify window, and update the coordinates if they are provided. Also, you should ensure that the `coordinates_provided` variable is set correctly in your test suite based on whether the screen element coordinates are available.
