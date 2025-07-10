@@ -1,25 +1,25 @@
 ```python
-def test_search_song_by_coordinates(spotify_app):
+def test_shuffle_songs(spotify_app):
     """
-    Search for a song by entering coordinates.
+    Shuffle all songs in the current playlist.
     """
-    # Click on search box
-    spotify_app.window(title_re="Spotify.*").child_window(auto_id="searchBox").click()
-
-    # Enter song name
-    send_keys("Imagine")
-
-    # Click on search result
-    spotify_app.window(title_re="Spotify.*").child_window(auto_id="searchResultItem0").click()
-
-    # Verify song is playing
+    # Navigate to the home screen
+    spotify_app.child_window(auto_id="HomeButton").click()
     time.sleep(2)
-    assert spotify_app.window(title_re="Spotify.*").child_window(auto_id="nowPlayingTitle").text == "Imagine"
-```
 
-**Notes:**
+    # Click the three dots menu in the top right corner
+    spotify_app.child_window(auto_id="OverflowMenuButton").click()
+    time.sleep(2)
 
-* This test assumes that the coordinates are correct and that the elements are still available on the screen.
-* You may need to adjust the `auto_id` values depending on the specific version of Spotify.
-* The test verifies that the song title matches the expected value.
-* You can add more assertions to the test to verify other aspects of the search results.
+    # Click the "Shuffle all" option
+    spotify_app.child_window(title="Shuffle all").click()
+    time.sleep(2)
+
+    # Verify that the songs have been shuffled by checking if the track order has changed
+    track_order_before = [track.window_text() for track in spotify_app.child_window(auto_id="PlaybackNowView").children()]
+    time.sleep(2)
+    spotify_app.child_window(auto_id="PlaybackNowView").click()
+    track_order_after = [track.window_text() for track in spotify_app.child_window(auto_id="PlaybackNowView").children()]
+
+    assert track_order_before != track_order_after, "Songs have not been shuffled"
+```
