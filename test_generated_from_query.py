@@ -1,8 +1,10 @@
 ```python
 import pytest, time
 from pywinauto import Application
+from pywinauto.keyboard import send_keys
 
 SPOTIFY_PATH = r"C:\Users\<YOUR_USER>\AppData\Local\Microsoft\WindowsApps\Spotify.exe"
+
 
 def connect_spotify():
     try:
@@ -18,7 +20,7 @@ def spotify_app():
     win = app.window(title_re="Spotify.*")
     win.set_focus()
     yield win
-    app.close()
+    app.kill()
 
 
 def test_search_song_and_open_result(spotify_app):
@@ -26,22 +28,10 @@ def test_search_song_and_open_result(spotify_app):
     Search for a song ('Imagine') using the global search box
     and open the top result.
     """
-    # Focus the search box
-    spotify_app.window(title_re="Spotify.*").child_window(title_re="Search bar").set_focus()
-    
-    # Type the search query
-    spotify_app.window(title_re="Spotify.*").child_window(title_re="Search bar").set_text("Imagine")
-    
-    # Simulate pressing Enter
-    time.sleep(1)
-    spotify_app.window(title_re="Spotify.*").child_window(title_re="Search bar").set_text("Imagine")
-    time.sleep(1)
-
-    # Open the first result
-    spotify_app.window(title_re="Spotify.*").child_window(title_re="Search bar").set_text("Imagine")
-    time.sleep(2)
-
-    # Open the top result.
-    spotify_app.window(title_re="Spotify.*").child_window(title_re="Search bar").set_text("Imagine")
+    send_keys("^l")  # CTRL+L focuses the search bar
+    send_keys("Imagine{ENTER}")  # type query + Enter
+    time.sleep(3)
+    # move to first result and open
+    send_keys("{TAB}{TAB}{ENTER}")
     time.sleep(2)
 ```
