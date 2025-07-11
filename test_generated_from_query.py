@@ -3,6 +3,7 @@ import pytest, time
 from pywinauto import Application
 from pywinauto.keyboard import send_keys
 
+
 SPOTIFY_PATH = r"C:\Users\<YOUR_USER>\AppData\Local\Microsoft\WindowsApps\Spotify.exe"
 
 
@@ -28,10 +29,14 @@ def test_search_song_and_open_result(spotify_app):
     Search for a song ('Imagine') using the global search box
     and open the top result.
     """
+    # Focus the search bar
     send_keys("^l")  # CTRL+L focuses the search bar
+
+    # Search for "Imagine"
     send_keys("Imagine{ENTER}")  # type query + Enter
     time.sleep(3)
-    # move to first result and open
+
+    # Open the first search result
     send_keys("{TAB}{TAB}{ENTER}")
     time.sleep(2)
 ```
